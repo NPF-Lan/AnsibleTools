@@ -31,6 +31,7 @@ before_script:
   - |
     for a in `ls src/`; do
       cd src/$a && $GOPATH/bin/dep ensure;
+      tree .
       cd ../..;
     done
 
@@ -49,3 +50,15 @@ script:
       go build;
       cd ../..;
     done
+
+
+#before_deploy:
+#  # Set up git user name and tag this commit
+#  - git config --local user.name "YOUR GIT USER NAME"
+#  - git config --local user.email "YOUR GIT USER EMAIL"
+#  - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
+#deploy:
+#  provider: releases
+#  api_key: "GITHUB OAUTH TOKEN"
+#  file: "FILE TO UPLOAD"
+#  skip_cleanup: true
