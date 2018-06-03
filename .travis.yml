@@ -25,14 +25,13 @@ notifications:
 before_script:
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
   - chmod +x $GOPATH/bin/dep
-  - cd /tmp
   - curl -Ls https://github.com/golangci/golangci-lint/releases/download/v1.4.1/golangci-lint-1.4.1-linux-amd64.tar.gz -o/tmp/golangci-lint.tar.gz
-  - tar zxvf /tmp/golangci-lint.tar.gz golangci-lint-1.4.1-linux-amd64/golangci-lint
-  - chmod +x golangci-lint-1.4.1-linux-amd64/golangci-lint
-  - cd
+  - tar zxvf -C/tmp /tmp/golangci-lint.tar.gz golangci-lint-1.4.1-linux-amd64/golangci-lint
+  - chmod +x /tmp/golangci-lint-1.4.1-linux-amd64/golangci-lint
   - |
     for a in `ls src/`; do
       cd src/$a && $GOPATH/bin/dep ensure;
+      cd ../..;
     done
 
 
@@ -47,5 +46,5 @@ script:
       cd src/$a;
       /tmp/golangci-lint-1.4.1-linux-amd64/golangci-lint run;       # run a bunch of code checkers/linters in parallel
       go test -v -race ./...;  # Run all the tests with the race detector enabled
-      cd ..
+      cd ../..;
     done
