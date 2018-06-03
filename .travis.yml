@@ -31,7 +31,6 @@ before_script:
   - |
     for a in `ls src/`; do
       cd src/$a && $GOPATH/bin/dep ensure;
-      tree .
       cd ../..;
     done
 
@@ -48,6 +47,7 @@ script:
       /tmp/golangci-lint-1.4.1-linux-amd64/golangci-lint run;       # run a bunch of code checkers/linters in parallel
       go test -v -race ./...;  # Run all the tests with the race detector enabled
       go build;
+      tree .;
       cd ../..;
     done
 
