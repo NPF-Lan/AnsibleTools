@@ -16,7 +16,11 @@ git:
 
 # Skip the install step. Don't `go get` dependencies. Only build with the code
 # in vendor/
-install: true
+install:
+  - |
+  for a in `ls src/`; do
+    cd $a && dep ensure;
+  done
 
 # Don't email me the results of the test runs.
 notifications:
@@ -29,11 +33,26 @@ notifications:
 # ...and adding this to your Gopkg.toml file.
 #   required = ["github.com/golangci/golangci-lint/cmd/golangci-lint"]
 before_script:
-  - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -d -s v1.4.1
+  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+  - chmod +x $GOPATH/bin/dep
+  - cd /tmp
+  - curl https://github.com/golangci/golangci-lint/releases/download/v1.4.1/golangci-lint-1.4.1-linux-amd64.tar.gz -o/tmp/golangci-lint.tar.gz
+  - tar zxvf /tmp/golangci-lint.tar.gz golangci-lint-1.4.1-linux-amd64/golangci-lint
+  - chmod +x golangci-lint-1.4.1-linux-amd64/golangci-lint
+  - cp golangci-lint-1.4.1-linux-amd64/golangci-lint /bin/
+  - cd
+
+
 
 # script always runs to completion (set +e). If we have linter issues AND a
 # failing test, we want to see both. Configure golangci-lint with a
 # .golangci.yml file at the top level of your repo.
 script:
-  - golangci-lint run       # run a bunch of code checkers/linters in parallel
-  - go test -v -race ./...  # Run all the tests with the race detector enabled
+  - |
+  for a in `ls src`; do
+    echo $a;
+    cd $a;
+    golangci-lint run;       # run a bunch of code checkers/linters in parallel
+    go test -v -race ./...;  # Run all the tests with the race detector enabled
+    cd ..
+  done
