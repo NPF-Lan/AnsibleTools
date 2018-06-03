@@ -19,7 +19,7 @@ git:
 install:
   - |
     for a in `ls src/`; do
-      cd $a && dep ensure;
+      cd src/$a && dep ensure;
     done
 
 # Don't email me the results of the test runs.
@@ -51,7 +51,7 @@ script:
   - |
     for a in `ls src`; do
       echo $a;
-      cd $a;
+      cd src/$a;
       golangci-lint run;       # run a bunch of code checkers/linters in parallel
       go test -v -race ./...;  # Run all the tests with the race detector enabled
       cd ..
