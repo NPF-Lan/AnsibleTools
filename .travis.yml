@@ -51,7 +51,7 @@ script:
       cd src/$a;
       /tmp/golangci-lint-1.4.1-linux-amd64/golangci-lint run;       # run a bunch of code checkers/linters in parallel
       go test -v -race ./...;  # Run all the tests with the race detector enabled
-      go build;
+      CGO_ENABLED=0 GOOS=linux go build -a -ldflags '-extldflags "-static"';
       tree .;
       cd ../..;
     done
