@@ -1,30 +1,30 @@
 package main
 
 import (
-	"os"
-	"github.com/asaskevich/govalidator"
+	"encoding/binary"
+	"fmt"
 	"log"
 	"net"
-	"encoding/binary"
+	"os"
 	"strconv"
-	"fmt"
+
+	"github.com/asaskevich/govalidator"
 )
 
-func main(){
+func main() {
 	if len(os.Args) == 3 {
 		var ip string = os.Args[1]
 		var incrementAmount string = os.Args[2]
 
-		if !govalidator.IsIPv4(ip){
+		if !govalidator.IsIPv4(ip) {
 			log.Fatal("ip is invalid")
 		}
-		if !govalidator.IsNumeric(incrementAmount){
+		if !govalidator.IsNumeric(incrementAmount) {
 			log.Fatal("incrementAmount is not numeric")
 		}
 		uint64IncrementAmount, err := strconv.ParseUint(incrementAmount, 10, 32)
 
-
-		if err != nil{
+		if err != nil {
 			log.Fatal(err)
 		}
 		uint32IncrementAmount := uint32(uint64IncrementAmount)
@@ -36,16 +36,15 @@ func main(){
 		ipUint32 += uint32IncrementAmount
 
 		fmt.Print(int2ip(ipUint32))
-	}else{
+	} else {
 		printUsage()
 	}
 }
 
-func printUsage(){
-	fmt.Println(os.Args[0]+" startip incrementAmount")
-	fmt.Println("Example: "+os.Args[0]+" 192.168.0.0 10")
+func printUsage() {
+	fmt.Println(os.Args[0] + " startip incrementAmount")
+	fmt.Println("Example: " + os.Args[0] + " 192.168.0.0 10")
 }
-
 
 func ip2int(ip net.IP) uint32 {
 	if len(ip) == 16 {

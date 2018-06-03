@@ -1,12 +1,13 @@
 package main
 
 import (
-	"github.com/asaskevich/govalidator"
+	"flag"
+	"fmt"
 	"log"
 	"net"
-	"fmt"
-	"flag"
 	"os"
+
+	"github.com/asaskevich/govalidator"
 )
 
 var ExcludeBroadcast = flag.Bool("--exclude-broadcast", false, "Exclude Broadcast Address")
@@ -23,17 +24,17 @@ func Hosts(cidr string) ([]string, error) {
 		ips = append(ips, ip.String())
 	}
 	// remove network address and broadcast address
-	
+
 	if *ExcludeBroadcast && *ExcludeNetID {
 		return ips[1 : len(ips)-1], nil
 	}
 	if *ExcludeBroadcast {
-		return ips[: len(ips)-1], nil
+		return ips[:len(ips)-1], nil
 	}
 	if *ExcludeNetID {
 		return ips[1:], nil
 	}
-	
+
 	return ips, nil
 }
 
@@ -47,38 +48,38 @@ func inc(ip net.IP) {
 	}
 }
 
-func main(){
+func main() {
 	var (
-		loggerError = log.New(os.Stderr,"",0)
+		loggerError = log.New(os.Stderr, "", 0)
 	)
 
 	flag.Parse()
-	if len(flag.Args()) >= 1{
-		for _,cidr := range(flag.Args()) {
+	if len(flag.Args()) >= 1 {
+		for _, cidr := range flag.Args() {
 
-			if !govalidator.IsCIDR(cidr){
+			if !govalidator.IsCIDR(cidr) {
 				loggerError.Println(fmt.Sprintf("ip '%s' is not a valid cidr notation", cidr))
-			}else{
+			} else {
 				hosts, err := Hosts(cidr)
-				
+
 				if err != nil {
 					loggerError.Println(err)
-				}else{
-					for i,ip := range(hosts) {
+				} else {
+					for i, ip := range hosts {
 						if i > 0 {
-							fmt.Printf("\n")
+							fmt.Print("\n")
 						}
-						fmt.Printf(ip)
+						fmt.Print(ip)
 					}
 				}
 			}
 		}
-	}else{
+	} else {
 		flag.PrintDefaults()
 		printUsage()
 	}
 }
 
-func printUsage(){
+func printUsage() {
 
 }
