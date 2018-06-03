@@ -26,7 +26,7 @@ before_script:
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
   - chmod +x $GOPATH/bin/dep
   - curl -Ls https://github.com/golangci/golangci-lint/releases/download/v1.4.1/golangci-lint-1.4.1-linux-amd64.tar.gz -o/tmp/golangci-lint.tar.gz
-  - tar zxvf -C/tmp /tmp/golangci-lint.tar.gz golangci-lint-1.4.1-linux-amd64/golangci-lint
+  - tar zxvf /tmp/golangci-lint.tar.gz -C /tmp golangci-lint-1.4.1-linux-amd64/golangci-lint
   - chmod +x /tmp/golangci-lint-1.4.1-linux-amd64/golangci-lint
   - |
     for a in `ls src/`; do
