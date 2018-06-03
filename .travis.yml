@@ -16,22 +16,12 @@ git:
 
 # Skip the install step. Don't `go get` dependencies. Only build with the code
 # in vendor/
-install:
-  - |
-    for a in `ls src/`; do
-      cd src/$a && dep ensure;
-    done
+install: true
 
 # Don't email me the results of the test runs.
 notifications:
   email: false
 
-# Anything in before_script that returns a nonzero exit code will flunk the
-# build and immediately stop. It's sorta like having set -e enabled in bash.
-# Make sure golangci-lint is vendored by running
-#   dep ensure -add github.com/golangci/golangci-lint/cmd/golangci-lint
-# ...and adding this to your Gopkg.toml file.
-#   required = ["github.com/golangci/golangci-lint/cmd/golangci-lint"]
 before_script:
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
   - chmod +x $GOPATH/bin/dep
@@ -42,6 +32,10 @@ before_script:
   - chmod +x golangci-lint-1.4.1-linux-amd64/golangci-lint
   - cp golangci-lint-1.4.1-linux-amd64/golangci-lint /bin/
   - cd
+  - |
+    for a in `ls src/`; do
+      cd src/$a && dep ensure;
+    done
 
 
 
